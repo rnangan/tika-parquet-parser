@@ -1,9 +1,176 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <groupId>tika-parquet-parser</groupId>
-    <artifactId>tika-parser-parquet-module</artifactId>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>tika-parsers-standard-modules</artifactId>
+    <groupId>org.apache.tika</groupId>
     <version>2.9.1</version>
-    <name>Apache Tika Parquet Parser</name>
-    <description>parquet parser implementation jar.</description>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
+  <artifactId> tika-parser-parquet-module</artifactId>
+  <name>Apache Tika Parquet parser module</name>
+
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common -->
+    <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-common</artifactId>
+        <version>2.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-mapreduce-client-core</artifactId>
+        <version>2.2.0</version>
+    </dependency>
+    <dependency>
+        <groupId> com.sun.jersey </groupId>
+        <artifactId> jersey-json </artifactId>
+        <version> 1.9 </version>
+        <exclusions>
+            <exclusion>
+                <groupId> org.codehaus.jackson </groupId>
+                <artifactId> jackson-mapper-asl </artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId> org.codehaus.jackson </groupId>
+                <artifactId> jackson-core-asl </artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId> org.codehaus.jackson </groupId>
+                <artifactId> jackson-jaxrs </artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId> org.codehaus.jackson </groupId>
+                <artifactId> jackson-xc </artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId> org.codehaus.jackson </groupId>
+        <artifactId> jackson-mapper-asl </artifactId>
+        <version> 1.8.8 </version>
+    </dependency>
+    <dependency>
+        <groupId> commons-configuration </groupId>
+        <artifactId> commons-configuration </artifactId>
+        <version> 1.6 </version>
+        <exclusions>
+            <exclusion>
+                <groupId> commons-lang </groupId>
+                <artifactId> commons-lang </artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId> commons-lang </groupId>
+        <artifactId> commons-lang </artifactId>
+        <version> 2.5 </version>
+    </dependency>
+    <dependency>
+        <groupId> org.codehaus.jackson </groupId>
+        <artifactId> jackson-core-asl </artifactId>
+        <version> 1.8.8 </version>
+    </dependency>
+    <dependency>
+        <groupId> org.codehaus.jackson </groupId>
+        <artifactId> jackson-jaxrs </artifactId>
+        <version> 1.8.8 </version>
+    </dependency>
+    <dependency>
+        <groupId> org.codehaus.jackson </groupId>
+        <artifactId> jackson-xc </artifactId>
+        <version> 1.8.8 </version>
+    </dependency>
+    <dependency>
+        <groupId> javax.servlet </groupId>
+        <artifactId> servlet-api </artifactId>
+        <version> 2.5 </version>
+    </dependency>
+    <dependency>
+        <groupId> tomcat </groupId>
+        <artifactId> jasper-runtime </artifactId>
+        <version> 5.5.23 </version>
+        <exclusions>
+            <exclusion>
+                <groupId> javax.servlet </groupId>
+                <artifactId> servlet-api </artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.parquet/parquet-hadoop -->
+    <dependency>
+        <groupId>org.apache.parquet</groupId>
+        <artifactId>parquet-hadoop</artifactId>
+        <version>1.12.1</version>
+    </dependency>
+    <dependency>
+	<groupId>org.apache.parquet</groupId>
+	<artifactId>parquet-tools</artifactId>
+	<version>1.8.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
+    <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>2.12.17</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.scala-sbt/compiler-bridge -->
+    <dependency>
+        <groupId>org.scala-sbt</groupId>
+        <artifactId>compiler-bridge_2.12</artifactId>
+        <version>1.9.5</version>
+        <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>4.8.1</version>
+        <configuration>
+          <scalaVersion>2.12.18</scalaVersion>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.tika.parser.parquet</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <scm>
+    <tag>2.9.1-rc1</tag>
+  </scm>
 </project>
